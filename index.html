@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>돌려받는 여행 · 2026 가을</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F1; --card:#FFFFFF; --ink:#1C2A22; --muted:#5E6B63; --line:#D9DED3;
+  --pine:#24503A; --pine-soft:#E3EEE6; --ginkgo:#E8B91C; --ginkgo-soft:#FBF1CC; --stamp:#C2412D;
+  --display:'Black Han Sans','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#121A15; --card:#18221C; --ink:#E9EEE7; --muted:#A3B0A7; --line:#2C3A31;
+  --pine:#7FC39B; --pine-soft:#1F3328; --ginkgo:#F0C842; --ginkgo-soft:#3A3315; --stamp:#E8644F;}}
+:root[data-theme="dark"]{
+  --paper:#121A15; --card:#18221C; --ink:#E9EEE7; --muted:#A3B0A7; --line:#2C3A31;
+  --pine:#7FC39B; --pine-soft:#1F3328; --ginkgo:#F0C842; --ginkgo-soft:#3A3315; --stamp:#E8644F;}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+a{color:inherit}
+.wrap{max-width:480px;margin:0 auto;padding:20px 18px 64px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.brand{font-family:var(--display);font-size:20px;letter-spacing:.5px;color:var(--pine)}
+.ghost{background:none;border:0;color:var(--muted);font-size:14px;padding:6px 4px;cursor:pointer}
+.ghost:focus-visible,.btn:focus-visible,.opt:focus-visible,.chip:focus-visible,.pick:focus-visible,.lnk:focus-visible,input:focus-visible{outline:3px solid var(--ginkgo);outline-offset:2px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,10vw,46px);line-height:1.12;margin:0 0 14px;letter-spacing:-.5px}
+h2{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.25;margin:0 0 8px}
+h3{font-size:15px;font-weight:700;margin:0 0 10px;color:var(--muted)}
+p{margin:0 0 12px}
+.lead{color:var(--muted);font-size:15px;margin-bottom:26px}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px;cursor:pointer}
+.opt b{display:block;font-size:18px;margin-bottom:2px}
+.opt span{color:var(--muted);font-size:14px}
+.opt:active{transform:scale(.99)}
+.field{margin-bottom:22px}
+.field>label{display:block;font-weight:700;font-size:15px;margin-bottom:8px}
+.field small{color:var(--muted);font-weight:400}
+input[type=search]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-size:16px}
+.picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pick{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;font-size:14px;cursor:pointer}
+.pick em{font-style:normal;color:var(--muted);font-size:12px;margin-left:4px}
+.pick.dot::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--stamp);margin-left:6px;vertical-align:middle}
+.chosen{display:flex;align-items:center;justify-content:space-between;background:var(--pine-soft);border-radius:12px;padding:12px 14px;font-weight:700}
+.chosen button{background:none;border:0;color:var(--pine);font-size:14px;cursor:pointer;padding:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:9px 15px;font-size:15px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:var(--paper);font-weight:700}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font-size:17px;font-weight:700;background:var(--pine);color:var(--paper);cursor:pointer}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
+.btn.alt{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* ticket */
+.ticket{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:20px 16px 16px;margin-bottom:18px;position:relative}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:var(--paper);border:1.5px solid var(--line);transform:translateY(-50%)}
+.ticket::before{left:-10px;clip-path:inset(0 0 0 50%)}
+.ticket::after{right:-10px;clip-path:inset(0 50% 0 0)}
+.route{display:flex;align-items:flex-start;overflow-x:auto;padding:6px 2px 4px;gap:0}
+.stop{flex:1 0 66px;text-align:center;position:relative;min-width:66px}
+.stop:not(:last-child)::after{content:"";position:absolute;top:21px;left:calc(50% + 22px);right:calc(-50% + 22px);border-top:2px dashed var(--line)}
+.dotc{width:42px;height:42px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;border:2px solid var(--line);background:var(--paper);font-size:11px;font-weight:700;color:var(--muted)}
+.stop.ok .dotc{border:2.5px solid var(--stamp);color:var(--stamp);transform:rotate(-12deg);font-family:var(--display);font-size:13px;font-weight:400;background:transparent}
+.stop .nm{font-size:13px;font-weight:700;line-height:1.25}
+.stop .rl{font-size:11px;color:var(--muted)}
+.total{border-top:1.5px dashed var(--line);margin-top:14px;padding-top:14px}
+.total .lab{font-size:14px;color:var(--muted)}
+.big{font-family:var(--display);font-size:clamp(40px,13vw,56px);line-height:1;color:var(--pine);margin:6px 0 4px}
+.plus{display:inline-block;background:var(--ginkgo-soft);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:14px;font-weight:700;margin:4px 0}
+.breakdown{margin:10px 0 0;padding:0;list-style:none;font-size:14px}
+.breakdown li{display:flex;justify-content:space-between;gap:12px;padding:4px 0;color:var(--muted)}
+.breakdown li b{color:var(--ink);white-space:nowrap}
+
+.status{border-radius:16px;padding:16px;margin-bottom:22px}
+.status.yes{background:var(--pine-soft)}
+.status.no{background:var(--ginkgo-soft)}
+.status b{display:block;font-size:17px;margin-bottom:4px}
+.status p{font-size:14px;margin:0}
+
+.sec{margin:30px 0 12px}
+.near{display:flex;flex-direction:column;gap:8px}
+.nrow{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.nrow .tx{flex:1;min-width:0}
+.nrow .tx b{font-size:15px}
+.nrow .tx div{font-size:13px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.tag{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--pine-soft);color:var(--pine)}
+.tag.y{background:var(--ginkgo-soft);color:var(--ink)}
+.tag.r{background:transparent;border:1px solid var(--stamp);color:var(--stamp)}
+.add{border:1.5px solid var(--pine);background:none;color:var(--pine);border-radius:10px;padding:7px 11px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.add[aria-pressed="true"]{background:var(--pine);color:var(--paper)}
+
+.phase{margin-top:26px}
+.phase-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.phase-h .n{font-family:var(--display);font-size:28px;color:var(--ginkgo);line-height:1}
+.phase-h h2{margin:0;font-size:21px}
+.step{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.step input{appearance:none;-webkit-appearance:none;flex:0 0 24px;width:24px;height:24px;border:2px solid var(--line);border-radius:7px;margin-top:2px;cursor:pointer;background:var(--card);display:grid;place-items:center}
+.step input:checked{background:var(--pine);border-color:var(--pine)}
+.step input:checked::after{content:"";width:6px;height:11px;border:solid var(--paper);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.step .bd{flex:1;min-width:0}
+.step .tt{font-weight:700;font-size:15.5px;line-height:1.4}
+.step.done .tt{color:var(--muted);text-decoration:line-through}
+.step .ds{font-size:14px;color:var(--muted);margin-top:3px}
+.step .must{color:var(--stamp);font-weight:700}
+.lnks{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.lnk{display:inline-block;text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 11px;border-radius:9px;background:var(--ink);color:var(--paper)}
+.lnk.sub{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.prog{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:8px 0 2px}
+.prog i{display:block;height:100%;background:var(--ginkgo);transition:width .3s}
+.foot{margin-top:40px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.recs .nrow{cursor:pointer;text-align:left;width:100%;font:inherit}
+.recs .rank{font-family:var(--display);font-size:22px;color:var(--muted);width:26px;text-align:center}
+.fall{font-size:12.5px;color:var(--stamp);margin-top:2px}
+details.qa{border-top:1px solid var(--line);padding:4px 0}
+details.qa summary{cursor:pointer;font-weight:700;padding:12px 0;list-style:none}
+details.qa summary::after{content:"+";float:right;color:var(--muted);font-weight:400}
+details.qa[open] summary::after{content:"−"}
+details.qa p{font-size:15px;color:var(--ink)}
+body.big{zoom:1.2}
+.ghost[aria-pressed="true"]{color:var(--pine);font-weight:700}
+.dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dates label,.cmpin label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:400}
+input[type=date],input[type=number]{width:100%;padding:11px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);font-size:16px;min-width:0}
+.dlist{list-style:none;margin:0;padding:0}
+.dlist li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:14.5px}
+.dlist small{color:var(--muted);font-size:12.5px}
+.dlist em{font-style:normal;font-weight:700;font-size:13px;white-space:nowrap;padding:3px 9px;border-radius:7px}
+.dlist .ok em{background:var(--pine-soft);color:var(--pine)}
+.dlist .half em{background:var(--ginkgo-soft);color:var(--ink)}
+.dlist .no em{border:1px solid var(--stamp);color:var(--stamp)}
+.cmpin{display:grid;grid-template-columns:.7fr 1.2fr 1.1fr;gap:8px;margin-bottom:12px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp .col{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px}
+.cmp h3{font-family:var(--display);font-weight:400;font-size:20px;color:var(--ink);margin:0 0 8px}
+.cmp .r{padding:7px 0;border-top:1px dashed var(--line);font-size:13px}
+.cmp .r span{display:block;color:var(--muted)}
+.cmp .r b{font-size:15px}
+.cmp .r small{font-weight:400;color:var(--muted)}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0;line-height:1.55}
+.note b{color:var(--ink)}
+.verdict{background:var(--ginkgo-soft);border-radius:14px;padding:14px;margin-top:12px;font-size:15px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<!-- v5: 해당없음·청년/노동자 설명·반값 결제조건 --><main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+/* ===== 데이터: 2026.10.1 한겨레 기사 「여행가는 가을」 캠페인 정리 기준 ===== */
+const RAW = `부산|동구|35.13|129.04|D
+부산|서구|35.10|129.02|D
+부산|영도구|35.09|129.07|D
+대구|남구|35.85|128.59|D
+대구|서구|35.87|128.56|D
+대구|군위|36.24|128.57|D
+인천|강화|37.75|126.49|D
+인천|옹진|37.45|126.10|D
+경기|가평|37.83|127.51|D
+경기|연천|38.10|127.07|D
+강원|고성|38.38|128.47|D
+강원|삼척|37.45|129.17|D
+강원|양구|38.11|127.99|D
+강원|양양|38.08|128.62|D
+강원|영월|37.18|128.46|D
+강원|정선|37.38|128.66|D
+강원|철원|38.15|127.31|D
+강원|태백|37.16|128.99|D
+강원|평창|37.37|128.39|D
+강원|홍천|37.70|127.89|D
+강원|화천|38.11|127.71|D
+강원|횡성|37.49|127.98|D
+충북|괴산|36.81|127.79|D
+충북|단양|36.98|128.37|D
+충북|보은|36.49|127.73|D
+충북|영동|36.18|127.78|D
+충북|옥천|36.31|127.57|D
+충북|제천|37.13|128.19|D
+충남|공주|36.45|127.12|D
+충남|금산|36.11|127.49|D
+충남|논산|36.19|127.10|D
+충남|보령|36.33|126.61|D
+충남|부여|36.28|126.91|D
+충남|서천|36.08|126.69|D
+충남|예산|36.68|126.85|D
+충남|청양|36.46|126.80|D
+충남|태안|36.75|126.30|D
+전북|고창|35.44|126.70|D
+전북|김제|35.80|126.88|D
+전북|남원|35.42|127.39|D
+전북|무주|36.01|127.66|D
+전북|부안|35.73|126.73|D
+전북|순창|35.37|127.14|D
+전북|임실|35.62|127.29|D
+전북|장수|35.65|127.52|D
+전북|정읍|35.57|126.86|D
+전북|진안|35.79|127.42|D
+전남|강진|34.64|126.77|D
+전남|고흥|34.61|127.29|D
+전남|곡성|35.28|127.29|D
+전남|구례|35.20|127.46|D
+전남|담양|35.32|126.99|D
+전남|보성|34.77|127.08|D
+전남|신안|34.83|126.35|D
+전남|영광|35.28|126.51|D
+전남|영암|34.80|126.70|D
+전남|완도|34.31|126.75|D
+전남|장성|35.30|126.78|D
+전남|장흥|34.68|126.91|D
+전남|진도|34.49|126.26|D
+전남|함평|35.07|126.52|D
+전남|해남|34.57|126.60|D
+전남|화순|35.06|126.99|D
+경북|고령|35.73|128.26|D
+경북|문경|36.59|128.19|D
+경북|봉화|36.89|128.73|D
+경북|상주|36.41|128.16|D
+경북|성주|35.92|128.28|D
+경북|안동|36.57|128.73|D
+경북|영덕|36.42|129.37|D
+경북|영양|36.67|129.11|D
+경북|영주|36.81|128.62|D
+경북|영천|35.97|128.94|D
+경북|울릉|37.48|130.90|D
+경북|울진|36.99|129.40|D
+경북|의성|36.35|128.70|D
+경북|청도|35.65|128.73|D
+경북|청송|36.44|129.06|D
+경남|거창|35.69|127.91|D
+경남|고성|34.97|128.32|D
+경남|남해|34.84|127.89|D
+경남|밀양|35.50|128.75|D
+경남|산청|35.42|127.87|D
+경남|의령|35.32|128.26|D
+경남|창녕|35.54|128.49|D
+경남|하동|35.07|127.75|D
+경남|함안|35.27|128.41|D
+경남|함양|35.52|127.73|D
+경남|합천|35.57|128.17|D
+서울|서울|37.57|126.98|
+인천|인천|37.46|126.71|
+경기|수원|37.26|127.03|
+경기|성남|37.42|127.13|
+경기|고양|37.66|126.83|
+경기|용인|37.24|127.18|
+경기|평택|36.99|127.11|
+경기|양평|37.49|127.49|
+경기|포천|37.89|127.20|
+강원|춘천|37.88|127.73|
+강원|원주|37.34|127.92|
+강원|강릉|37.75|128.88|
+강원|속초|38.21|128.59|
+강원|동해|37.52|129.11|
+충북|청주|36.64|127.49|
+충북|충주|36.99|127.93|
+충남|천안|36.81|127.15|
+충남|아산|36.79|127.00|
+충남|홍성|36.60|126.66|
+충남|서산|36.78|126.45|
+대전|대전|36.35|127.38|
+세종|세종|36.48|127.29|
+전북|전주|35.82|127.15|
+전북|군산|35.97|126.74|
+전북|익산|35.95|126.96|
+광주|광주|35.16|126.85|
+전남|목포|34.81|126.39|
+전남|여수|34.76|127.66|
+전남|순천|34.95|127.49|
+전남|광양|34.94|127.70|
+전남|나주|35.02|126.71|
+대구|대구|35.87|128.60|
+경북|경주|35.86|129.22|
+경북|포항|36.02|129.34|
+경북|구미|36.12|128.34|
+경북|김천|36.14|128.11|
+부산|부산|35.16|129.06|
+부산|해운대|35.16|129.16|
+울산|울산|35.54|129.31|
+경남|창원|35.23|128.68|
+경남|진주|35.18|128.11|
+경남|통영|34.85|128.43|
+경남|거제|34.88|128.62|
+경남|사천|35.00|128.06|
+경남|김해|35.23|128.89|
+제주|제주|33.50|126.53|
+제주|서귀포|33.25|126.56|`;
+
+const set = s => new Set(s.split(' '));
+const KTX = set('강원삼척 강원영월 강원정선 강원태백 강원횡성 대구군위 경북문경 경남밀양 경북봉화 경북안동 경북영덕 경북영주 경북영천 경북울릉 경북울진 경북의성 경북청도 충남공주 충북괴산 충남논산 충북단양 충남보령 충남서천 충북영동 충북옥천 충남예산 충북제천 전남강진 전남곡성 전남고흥 전남구례 전북김제 전북남원 전북무주 전남보성 전남장성 전남장흥 전북정읍 전북임실 전남함평 전남해남');
+const BONUS = set('전남해남 전남함평 전남장성 강원태백 전남보성 전북임실 전남강진 대구군위 충북괴산 경북봉화 전남장흥 경북의성 전북무주');
+const HALF = set('강원화천 경남고성 경남산청 경남함양 경남밀양 경남거창 경북안동 경북영천 충남서천 충남태안 전남장흥 전남영광 전남완도');
+const ISLAND = set('경북울릉 전남신안 전남완도 인천옹진');
+const CAPITAL = new Set(['서울','인천','경기']);
+const NOTES = {'전남담양':'메타세쿼이아길 단풍','경북영주':'부석사 단풍, 소수서원 은행나무','경북안동':'하회마을 단풍','전남장성':'백양사 가을 풍경','강원철원':'고석정 꽃밭'};
+const AIRPORTS = [['광주',35.14,126.81],['울산',35.59,129.35],['여수',34.84,127.62],['포항',35.99,129.42],['사천',35.09,128.07]];
+const LOCAL = [
+  {at:[35.87,128.60],r:30,t:'대구 시티투어 순환노선 30% 할인',d:'도심 관광 순환노선 요금이 내려갔어요.'},
+  {at:[37.16,128.99],r:15,t:'태백 관광시티투어 버스 최대 50% 할인',d:'태백시 관광시티투어 탑승권.'},
+  {at:[36.60,126.66],r:30,t:'홍성 신바람 관광택시 할인',d:'4시간 이용 시 4만원, 6시간 이용 시 6만원 할인.'},
+  {at:[36.50,127.27],r:25,t:'국립세종수목원 야간개장 반값',d:'10월 매주 금·토 야간 개장 입장료 50%.'}
+];
+
+const PLACES = RAW.trim().split('\n').map(l=>{
+  const [prov,name,lat,lng,f]=l.split('|'); const key=prov+name;
+  return {id:key,prov,name,lat:+lat,lng:+lng,decline:f==='D',
+    ktx:KTX.has(key),bonus:BONUS.has(key),half:HALF.has(key),island:ISLAND.has(key),note:NOTES[key]||'',
+    label: name+(['동구','서구','남구','고성'].includes(name)||name.length<2?'('+prov+')':''),
+    sub: f==='D' ? prov+' · 인구감소지역' : prov};
+});
+// 같은 이름 구분
+PLACES.forEach(p=>{ if(PLACES.filter(q=>q.name===p.name).length>1) p.label=p.name+'('+p.prov+')'; });
+const byId = id => PLACES.find(p=>p.id===id);
+
+const L = {
+  month:['여행가는 달 캠페인','https://korean.visitkorea.or.kr/travelmonth'],
+  half:['대한민국 반값여행 (지역별 신청)','https://korean.visitkorea.or.kr/dgtourcard/tour50.do'],
+  korail:['코레일 (레츠코레일)','https://www.letskorail.com'],
+  stay:['숙박세일페스타 누리집','https://ktostay.visitkorea.or.kr'],
+  yanolja:['야놀자','https://www.yanolja.com'],
+  yeogi:['여기어때','https://www.yeogi.com'],
+  interpark:['인터파크 투어','https://travel.interpark.com'],
+  campingtalk:['캠핑톡','https://campingtalk.me'],
+  camfit:['캠핏','https://camfit.co.kr'],
+  tmap:['티맵','https://www.tmap.co.kr'],
+  sea:['렌터카 할인 안내','https://seatravelmonth.kr'],
+  socar:['쏘카','https://www.socar.kr'],
+  naverair:['네이버 항공권','https://flight.naver.com'],
+  benepia:['휴가샵 (노동자 휴가지원)','https://vacation.benepia.co.kr'],
+  temple:['템플스테이','https://www.templestay.com'],
+  spot:['100×100 명소','https://spot100x100.kr']
+};
+const lk = (k,sub) => `<a class="lnk${sub?' sub':''}" href="${L[k][1]}" target="_blank" rel="noopener">${L[k][0]}</a>`;
+
+/* ===== 거리 계산 ===== */
+const rad = d=>d*Math.PI/180;
+function km(a,b){const R=6371,dl=rad(b.lat-a.lat),dg=rad(b.lng-a.lng);
+  const h=Math.sin(dl/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dg/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function segKm(p,a,b){const c=Math.cos(rad(p.lat));const X=q=>(q.lng-p.lng)*111.32*c,Y=q=>(q.lat-p.lat)*110.57;
+  const ax=X(a),ay=Y(a),bx=X(b),by=Y(b),dx=bx-ax,dy=by-ay;const L2=dx*dx+dy*dy;
+  let t=L2?((-ax)*dx+(-ay)*dy)/L2:0;t=Math.max(0,Math.min(1,t));return Math.hypot(ax+t*dx,ay+t*dy);}
+
+/* ===== 상태 ===== */
+const KEY='dolryeobatgi-v1';
+let S={screen:'start',origin:null,dest:null,via:null,extras:[],modes:['train'],stay:'hotel',youth:false,car:'gas',depart:'',ret:'',people:1,fare:'',fuel:'',bigText:false,worker:false,checks:{},wants:['ktx','half']};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)S=Object.assign(S,s);}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const won = n => n.toLocaleString('ko-KR')+'원';
+const app = document.getElementById('app');
+const header = (back)=>`<div class="top"><span class="brand">돌려받는 여행</span><span>${back?`<button class="ghost" data-a="go" data-v="${back}">← 이전</button>`:''}<button class="ghost" data-a="flag" data-v="bigText" aria-pressed="${S.bigText}">${S.bigText?'글씨 보통':'글씨 크게'}</button></span></div>`;
+
+function weight(p){return (p.ktx?3:0)+(p.half?3:0)+(p.bonus?2:0)+(p.decline?1:0);}
+function tagsOf(p,modes){const t=[];
+  if(p.ktx) t.push(`<span class="tag">기차표 100% 환급</span>`);
+  if(p.half) t.push(`<span class="tag y">경비 50% 환급</span>`);
+  if(p.bonus) t.push(`<span class="tag y">온누리 2만원</span>`);
+  if(p.decline) t.push(`<span class="tag">티맵 스탬프</span>`);
+  if(p.island) t.push(`<span class="tag">섬 숙박 할인</span>`);
+  return t.join('');}
+
+/* ===== 장소 선택 ===== */
+function picker(field,label,hint,opts={}){
+  const cur=S[field]&&byId(S[field]);
+  if(cur) return `<div class="field"><label>${label}</label><div class="chosen"><span>${cur.label} <small style="font-weight:400;color:var(--muted)">${cur.sub}</small></span><button data-a="clear" data-v="${field}">바꾸기</button></div></div>`;
+  return `<div class="field"><label for="in-${field}">${label} ${hint?`<small>${hint}</small>`:''}</label>
+  <input type="search" id="in-${field}" data-f="${field}" placeholder="${opts.ph||'시·군 이름 검색 (예: 담양, 강릉)'}" autocomplete="off">
+  <div class="picks" data-list="${field}">${pickList(field,'')}</div>
+  ${opts.dotNote?'<div class="hint">빨간 점은 이번 혜택 대상 인구감소지역이에요.</div>':''}</div>`;
+}
+function pickList(field,q){
+  q=q.trim(); let list;
+  if(!q){ list = field==='origin' ? ['서울서울','경기수원','경기성남','인천인천','대전대전','대구대구','부산부산','광주광주'].map(byId)
+                                  : ['전남담양','경북안동','경북영주','강원정선','전남해남','강원강릉','전남여수','경북경주'].map(byId); }
+  else list = PLACES.filter(p=>(p.name+p.prov+p.label).includes(q)).slice(0,10);
+  if(!list.length) return `<span class="hint">"${q}" 이(가) 목록에 없어요. 가까운 시·군 이름으로 찾아보세요.</span>`;
+  return list.map(p=>`<button class="pick${p.decline&&field!=='origin'?' dot':''}" data-a="pick" data-f="${field}" data-v="${p.id}">${p.label}<em>${p.prov}</em></button>`).join('');
+}
+
+const MODES=[['train','기차'],['car','내 차'],['rent','렌터카'],['air','비행기']];
+const STAYS=[['hotel','숙소'],['friend','친구·친척·가족 집'],['camp','캠핑'],['day','당일치기']];
+function chips(name,list,multi){return `<div class="chips">${list.map(([v,t])=>{
+  const on = multi? S[name].includes(v) : S[name]===v;
+  return `<button class="chip" aria-pressed="${on}" data-a="${multi?'toggle':'setone'}" data-f="${name}" data-v="${v}">${t}</button>`;}).join('')}</div>`;}
+function carNote(){
+  if(S.car==='ev') return '<p class="hint">티맵 이벤트에서 전기차는 2천포인트를 더 받아요.</p>';
+  if(S.car==='hybrid') return '<p class="hint">하이브리드는 티맵 추가 포인트 대상이 아니에요(추가 2천포인트는 전기차만). 스탬프 포인트는 차종과 상관없이 똑같이 받아요. 렌터카를 빌린다면 하이브리드는 렌터카 할인 대상이에요.</p>';
+  if(S.car==='lpg') return '<p class="hint">LPG 차는 티맵 추가 포인트 대상이 아니에요. 렌터카를 빌린다면 LPG(가스)차는 렌터카 할인 대상이에요.</p>';
+  return '';
+}
+function flags(){return `<div class="chips">
+  <button class="chip" aria-pressed="${S.youth}" data-a="flag" data-v="youth">청년이에요</button>
+  <button class="chip" aria-pressed="${S.worker}" data-a="flag" data-v="worker">노동자 휴가지원 참여 중</button>
+  <button class="chip" aria-pressed="${!S.youth&&!S.worker&&!!S.noneSel}" data-a="none">해당 사항 없어요</button></div>
+  <p class="note"><b>청년</b>은 만 19~34세예요(청년기본법 기준). 반값 환급률이 50%에서 70%로 올라가 1인 최대 14만원까지 받아요. 나이를 따지는 기준일(사업 공고일·신청일)은 지자체마다 달라요.</p>
+  <p class="note"><b>노동자 휴가지원</b>은 회사가 참여 신청한 중소기업·소상공인·비영리단체 등의 직원이 20만원을 넣으면 회사 10만원, 정부 10만원을 보태 40만원짜리 국내여행 포인트를 주는 제도예요. 이 포인트는 「휴가샵」에서만 쓸 수 있고, 개인이 혼자 신청할 순 없어서 회사 담당자에게 참여 여부를 물어봐야 해요.</p>`;}
+
+/* ===== 화면 ===== */
+const SCREENS={
+start(){return `${header()}
+  <h1>가을 여행,<br>쓴 만큼 돌려받기</h1>
+  <p class="lead">10~11월 「여행가는 가을」 혜택은 기차·숙소·티맵·지자체 환급이 제각각이에요. 출발부터 정산까지 한 줄로 이어 드릴게요.</p>
+  <button class="opt" data-a="mode" data-v="dest"><b>가려는 곳이 있어요</b><span>그 동네가 혜택 대상인지, 근처에 들를 곳은 없는지 확인</span></button>
+  <button class="opt" data-a="mode" data-v="nodest"><b>아직 안 정했어요</b><span>많이 돌려받는 곳부터 추천받기</span></button>
+  ${S.dest&&S.origin?`<button class="btn alt" data-a="go" data-v="plan" style="margin-top:8px">지난번 여행 플랜 이어보기</button>`:''}
+  <p class="foot">2026년 10월 1일 한겨레 보도와 문화체육관광부·한국관광공사 캠페인 안내를 바탕으로 정리했어요. 할인권은 대부분 선착순이라 남은 수량과 세부 조건은 링크된 공식 페이지에서 꼭 확인하세요.</p>`;},
+
+dest(){const ok=S.origin&&S.dest;return `${header('start')}
+  <h2>어디서 어디로 가세요?</h2><p class="lead">경유지가 있으면 같이 넣어 주세요. 가는 길에 혜택 지역이 있는지도 찾아 드려요.</p>
+  ${picker('origin','출발지')}
+  ${picker('dest','목적지','',{dotNote:true})}
+  ${picker('via','경유지','(선택)',{ph:'들렀다 갈 곳이 있다면'})}
+  <div class="field"><label>언제 가세요? <small>날짜를 넣으면 혜택 기간에 걸리는지 봐 드려요</small></label>
+  <div class="dates"><label>가는 날<input type="date" data-in="depart" value="${S.depart}" min="2026-10-01" max="2026-12-31"></label>
+  <label>오는 날<input type="date" data-in="ret" value="${S.ret}" min="2026-10-01" max="2026-12-31"></label></div></div>
+  <div class="field"><label>이동 수단 <small>여러 개 골라도 돼요. 기차와 차를 둘 다 고르면 뭐가 나은지 비교해 드려요</small></label>${chips('modes',MODES,true)}</div>
+  <div class="field"><label>잠은?</label>${chips('stay',STAYS,false)}${S.stay==='friend'?'<p class="hint">숙박비가 없으니 숙박 할인권은 해당 없어요. 반값 환급은 식사·체험·장보기로 받을 수 있는데, 그 지역 상품권으로 결제해야 인정되는 곳이 많아요. 기차·티맵 혜택은 그대로예요.</p>':''}</div>
+  ${(S.modes.includes('car')||S.modes.includes('rent'))?`<div class="field"><label>타고 가는 차 <small>내 차 기준</small></label>${chips('car',[['gas','휘발유·경유'],['hybrid','하이브리드'],['ev','전기차'],['lpg','LPG']],false)}${carNote()}</div>`:''}
+  <div class="field"><label>해당되는 것</label>${flags()}</div>
+  <button class="btn" data-a="go" data-v="plan" ${ok?'':'disabled'}>돌려받기 플랜 보기</button>
+  ${ok?'':'<p class="hint">출발지와 목적지를 고르면 버튼이 켜져요.</p>'}`;},
+
+nodest(){
+  const o=S.origin&&byId(S.origin);
+  let recs='';
+  if(o){
+    const W={ktx:p=>p.ktx,half:p=>p.half,bonus:p=>p.bonus,fall:p=>!!p.note};
+    const list=PLACES.filter(p=>p.decline && S.wants.every(w=>W[w](p))).map(p=>({p,d:km(o,p)}))
+      .filter(x=>x.d>30).sort((a,b)=>weight(b.p)-weight(a.p)||a.d-b.d).slice(0,10);
+    recs = list.length ? `<div class="near recs">${list.map((x,i)=>`<button class="nrow" data-a="choose" data-v="${x.p.id}">
+      <span class="rank">${i+1}</span><span class="tx"><b>${x.p.label}</b><div>${x.p.prov} · 출발지에서 약 ${Math.round(x.d)}km${x.p.note?' · '+x.p.note:''}</div><span class="tags">${tagsOf(x.p)}</span></span></button>`).join('')}</div>`
+      : `<p class="hint">고른 조건을 모두 만족하는 곳이 없어요. 조건을 하나 빼 보세요.</p>`;
+  }
+  return `${header('start')}
+  <h2>많이 돌려받는 곳 찾기</h2><p class="lead">출발지와 원하는 혜택을 고르면, 혜택이 겹치는 인구감소지역부터 보여 드려요.</p>
+  ${picker('origin','출발지')}
+  <div class="field"><label>꼭 받고 싶은 혜택</label>${chips('wants',[['ktx','기차표 전액 환급'],['half','경비 반값 환급'],['bonus','온누리 2만원'],['fall','단풍 명소']],true)}</div>
+  ${o?`<h3>추천 목적지 · 누르면 플랜으로</h3>${recs}`:'<p class="hint">출발지를 먼저 골라 주세요.</p>'}`;},
+
+plan(){return renderPlan();}
+};
+
+/* ===== 플랜 계산 ===== */
+function computePlan(){
+  const o=byId(S.origin),d=byId(S.dest),v=S.via&&byId(S.via);
+  const pts=[o,v,d].filter(Boolean);
+  const used=new Set(pts.map(p=>p.id));
+  const cands=PLACES.filter(p=>p.decline&&!used.has(p.id)).map(p=>{
+    let dr=Infinity;for(let i=0;i<pts.length-1;i++)dr=Math.min(dr,segKm(p,pts[i],pts[i+1]));
+    return {p,dd:km(p,d),dr,dO:km(p,o)};
+  }).filter(x=>x.dO>30&&(x.dd<=35||x.dr<=25))
+    .map(x=>({...x,kind:x.dd<=35?'목적지 근처':'가는 길'}))
+    .sort((a,b)=>weight(b.p)-weight(a.p)||Math.min(a.dd,a.dr)-Math.min(b.dd,b.dr)).slice(0,6);
+  const extras=S.extras.map(byId).filter(Boolean);
+  const visited=[v,...extras,d].filter(Boolean);
+  const dv=visited.filter(p=>p.decline);
+  const M=m=>S.modes.includes(m);
+  const drive=M('car')||M('rent');
+  const stamps=dv.filter(p=>km(p,o)>=30).length;
+  const b={};
+  b.train = M('train') && dv.filter(p=>p.ktx);
+  b.half = dv.filter(p=>p.half);
+  b.bonus = dv.filter(p=>p.bonus);
+  b.tmap = drive && stamps ? [0,5000,15000,30000][Math.min(3,stamps)] : 0;
+  b.tmapEv = b.tmap && S.car==='ev' ? 2000 : 0;
+  b.island = S.stay==='hotel' && dv.some(p=>p.island);
+  b.nonCap = !CAPITAL.has(d.prov);
+  b.rent = M('rent') && b.nonCap;
+  let air=null; if(M('air')){ if(d.prov==='제주') air={to:'제주',amt:5000}; else {const a=AIRPORTS.map(([n,la,ln])=>({n,d:km({lat:la,lng:ln},d)})).sort((x,y)=>x.d-y.d)[0]; if(a.d<=70) air={to:a.n,amt:10000};}}
+  b.air=air;
+  b.local = LOCAL.filter(l=>visited.some(p=>km(p,{lat:l.at[0],lng:l.at[1]})<=l.r));
+  const halfAmt = b.half.length ? (S.youth?140000:100000) : 0;
+  const parts=[];
+  if(halfAmt) parts.push(['지역사랑 휴가지원 (경비 50%)',halfAmt,'최대']);
+  if(b.bonus.length) parts.push(['온누리상품권 (선착순 2천명)',20000,'']);
+  if(b.tmap) parts.push(['티맵 포인트 ('+Math.min(3,stamps)+'곳 방문 도장)',b.tmap,'']);
+  if(b.tmapEv) parts.push(['티맵 포인트 (전기차 추가)',b.tmapEv,'']);
+  if(b.island) parts.push(['섬 숙박 할인 (7만원 이상 예약)',50000,'']);
+  if(air) parts.push(['네이버페이 포인트 (김포→'+air.to+')',air.amt,'1인']);
+  const total=parts.reduce((s,x)=>s+x[1],0);
+  return {o,d,v,cands,extras,visited,dv,b,parts,total,stamps,drive,M};
+}
+
+function step(id,tag,title,desc,links,must){
+  const done=!!S.checks[id];
+  return `<div class="step${done?' done':''}"><input type="checkbox" aria-label="${title} 완료" data-a="check" data-v="${id}" ${done?'checked':''}>
+  <div class="bd"><div class="tt">${title}</div><div class="tags" style="margin:3px 0 0"><span class="tag${must?' r':''}">${tag}</span></div>
+  <div class="ds">${desc}</div>${links?`<div class="lnks">${links}</div>`:''}</div></div>`;
+}
+
+const W=[
+ ['train','기차표 100% 환급 (자유여행상품)','2026-10-01','2026-11-30','캠페인 기간 10~11월 기준. 상품 판매 기간은 코레일에서 확인'],
+ ['drive','티맵 포인트','2026-10-01','2026-11-30',''],
+ ['rent','렌터카 할인','2026-10-01','2026-10-31','10월 한 달만. 11월로 넘어가는 대여는 적용 기준을 꼭 확인'],
+ ['hotel','숙박 할인권 사용','2026-10-01','2026-11-08','이날까지 숙박해야 해요'],
+ ['camp','캠핑장 할인권 발급','2026-10-01','2026-11-28',''],
+ ['air','네이버 항공권 포인트','2026-10-01','2026-11-30',''],
+ ['all','코리아 그랜드 페스티벌 (상품권 할인)','2026-10-29','2026-11-15','여행 중 상품권 할인을 같이 쓸 수 있어요']
+];
+function dateCheck(P){
+  if(!S.depart) return '';
+  const a=S.depart,z=S.ret||S.depart,M=P.M;
+  const use={train:M('train')&&P.dv.some(p=>p.ktx),drive:P.drive,rent:M('rent'),hotel:S.stay==='hotel',camp:S.stay==='camp',air:M('air'),all:true};
+  const rows=W.filter(w=>use[w[0]]).map(([k,t,s0,e,n])=>{
+    let st,cls; if(a>=s0&&z<=e){st='기간 안';cls='ok';} else if(z<s0||a>e){st='기간 밖';cls='no';} else {st='일부만 걸침';cls='half';}
+    if(k==='all'&&cls==='no') return '';
+    return `<li class="${cls}"><span><b>${t}</b><br><small>${s0.slice(5).replace('-','/')}~${e.slice(5).replace('-','/')}${n?' · '+n:''}</small></span><em>${st}</em></li>`;}).join('');
+  const half=P.b.half.length?`<li class="half"><span><b>지역사랑 휴가지원 (반값)</b><br><small>지자체마다 접수 기간이 달라요. 신청 페이지에서 날짜 확인</small></span><em>확인 필요</em></li>`:'';
+  const fmt=d=>d.slice(5).replace('-','/');
+  return `<div class="sec"><h2>${fmt(a)}${S.ret&&S.ret!==a?'~'+fmt(z):''} 여행, 기간에 걸릴까?</h2></div><ul class="dlist">${rows}${half}</ul>`;
+}
+function estimate(P){
+  const legs=[P.o,P.v,...P.extras,P.d].filter(Boolean);let line=0;for(let i=0;i<legs.length-1;i++)line+=km(legs[i],legs[i+1]);
+  const direct=km(P.o,P.d);
+  const road=Math.round(line*1.3), rail=direct*1.6;
+  const carH=road/72, trainH=rail/85+0.5;
+  const fareEst=Math.round(rail*115*2/1000)*1000;
+  return {road,carH,trainH,fareEst};
+}
+function compare(P){
+  const M=P.M; if(!(M('train')&&(M('car')||M('rent')))) return '';
+  const E=estimate(P), ppl=Math.max(1,+S.people||1);
+  const fare=+S.fare||E.fareEst;
+  const car={gas:[12,1700,'L'],hybrid:[18,1700,'L'],lpg:[9,1050,'L'],ev:[5,350,'kWh']}[S.car];
+  const price=+S.fuel||car[1];
+  const fuelCost=Math.round(E.road*2/car[0]*price/1000)*1000, toll=Math.round(E.road*2*45/1000)*1000;
+  const carCost=fuelCost+toll;
+  const tmapNow=P.b.tmap+(P.b.tmapEv||0);
+  const trainOK=P.dv.some(p=>p.ktx);
+  const trainCost=fare*ppl, trainBack=trainOK?trainCost:0;
+  const h=x=>{const H=Math.floor(x),m=Math.round((x-H)*6)*10;if(m===60){return `${H+1}시간`;} return H?`${H}시간${m?' '+m+'분':''}`:`${m}분`;};
+  let verdict;
+  if(!trainOK) verdict='이 여정엔 기차표 환급 대상 지역이 없어서, 기차로 가도 돌려받는 게 없어요. 차가 유리할 가능성이 커요.';
+  else if(ppl===1) verdict=`혼자라면 기차표값이 통째로 할인권으로 돌아와서, <b>다음에 기차 탈 일이 있다면 기차가 사실상 공짜</b>예요. 다만 시간은 차보다 약 ${h(Math.max(0,E.trainH-E.carH))} 더 걸리고 현지에서 탈 것이 따로 필요해요.`;
+  else if(trainCost>carCost) verdict=`${ppl}명이면 기차표를 먼저 ${won(trainCost)} 내야 해요. 할인권으로 다 돌아오긴 하지만, 그 할인권을 다 쓸 계획이 없다면 <b>차가 현금이 덜 들어요</b>.`;
+  else verdict=`${ppl}명이어도 기차표가 차 기름값·통행료보다 싸고, 그마저 할인권으로 돌아와요. 시간 여유가 있다면 기차가 유리해요.`;
+  return `<div class="sec"><h2>기차 vs 차, 뭐가 나아요?</h2><p class="hint" style="margin-top:0">거리로 어림한 왕복 추정치예요. 칸을 고치면 바로 다시 계산돼요.</p></div>
+  <div class="cmpin">
+    <label>인원<input type="number" min="1" max="9" data-in="people" value="${ppl}" inputmode="numeric"></label>
+    <label>1인 왕복 기차요금<input type="number" step="1000" data-in="fare" value="${S.fare||''}" placeholder="${fareEst(E)}" inputmode="numeric"></label>
+    <label>${S.car==='ev'?'충전 단가(원/kWh)':'연료 단가(원/L)'}<input type="number" step="10" data-in="fuel" value="${S.fuel||''}" placeholder="${car[1]}" inputmode="numeric"></label>
+  </div>
+  <div class="cmp">
+    <div class="col"><h3>기차</h3>
+      <div class="r"><span>나가는 돈</span><b>${won(trainCost)}</b></div>
+      <div class="r"><span>돌려받는 것</span><b>${trainBack?won(trainBack)+'<br><small>기차 할인권</small>':'없음'}</b></div>
+      <div class="r"><span>걸리는 시간</span><b>편도 약 ${h(E.trainH)}</b></div>
+      <div class="r"><span>현지 이동</span><b>택시·버스·렌터카 따로</b></div></div>
+    <div class="col"><h3>차</h3>
+      <div class="r"><span>나가는 돈</span><b>${won(carCost)}</b></div>
+      <div class="r"><span>돌려받는 것</span><b>${tmapNow?won(tmapNow)+'<br><small>티맵 포인트</small>':'없음'}</b></div>
+      <div class="r"><span>걸리는 시간</span><b>편도 약 ${h(E.carH)}</b></div>
+      <div class="r"><span>현지 이동</span><b>내 차로 자유롭게</b></div></div>
+  </div>
+  <p class="hint">차: 왕복 약 ${E.road*2}km, ${S.car==='ev'?'충전':'연료'} ${won(fuelCost)} + 통행료 약 ${won(toll)}. 인원이 늘어도 차 비용은 같고, 기차는 인원만큼 늘어요.${P.stamps<3&&P.drive?' 가는 길에 대상 지역을 더 들르면 티맵 포인트가 최대 3만까지 올라가요.':''}</p>
+  <div class="verdict">${verdict}</div>`;
+}
+const fareEst=E=>E.fareEst;
+function howBack(P){
+  const b=P.b,rows=[];
+  if(b.train&&b.train.length) rows.push(['기차표값','<b>다음에 쓸 기차표 할인권</b>으로 받아요. 현금으로 돌려주는 게 아니에요.','현지 지정 관광지에서 QR 인증한 뒤','코레일 기차표 살 때']);
+  if(b.half.length) rows.push(['여행 경비 절반','<b>모바일 지역사랑상품권</b>(그 지역 전용 상품권)으로 받아요.','다녀와서 영수증을 내고 지자체가 확인한 뒤','그 지역 가게에서 (다음에 또 갈 때)']);
+  if(b.bonus.length) rows.push(['온누리상품권 2만원','<b>온누리상품권</b>으로 받아요. 선착순 2천명이에요.','대상 지역 방문 후','전통시장·상점가']);
+  if(b.tmap) rows.push(['티맵 포인트','<b>티맵 앱 안에 쌓이는 포인트</b>예요. 1포인트가 1원처럼 쓰여요.','지역에 도착해서 도장이 찍힐 때마다','티맵 앱으로 결제하는 주차·대리운전·전기차 충전 등 (사용처는 앱에서 확인)']);
+  if(S.stay==='hotel'&&b.nonCap) rows.push(['숙박 할인','돌려받는 게 아니라 <b>예약할 때 바로 깎여요</b>. 쿠폰을 먼저 받아야 해요.','숙박앱에서 결제할 때','11월 8일까지 숙박']);
+  if(S.stay==='camp') rows.push(['캠핑장 할인','<b>예약할 때 바로 깎이는 쿠폰</b>이에요.','캠핑 앱에서 결제할 때','11월 28일까지 발급']);
+  if(b.air) rows.push(['항공','<b>네이버페이 포인트</b>로 받아요.','네이버 항공권으로 산 뒤','네이버페이 결제처 어디서나']);
+  if(!rows.length) return '';
+  return `<div class="sec"><h2>뭘로 돌려받나요?</h2><p class="hint" style="margin-top:0">현금이 아니라 대부분 상품권·포인트·할인권이에요.</p></div>
+  <div class="near">${rows.map(r=>`<div class="nrow" style="display:block"><b>${r[0]}</b><div style="font-size:14.5px;color:var(--ink);margin:4px 0">${r[1]}</div>
+  <div style="font-size:13px;color:var(--muted)">언제: ${r[2]}<br>어디에 쓰나: ${r[3]}</div></div>`).join('')}</div>`;
+}
+function faq(){
+  const q=[
+   ['티맵 포인트가 뭐예요?','티맵(휴대폰 길안내 앱) 안에 쌓이는 적립금이에요. 은행에 들어오는 돈이 아니라, 티맵 앱으로 주차비나 대리운전비 같은 걸 낼 때 돈 대신 쓰는 거예요. 정확한 사용처는 티맵 앱의 포인트 화면에서 볼 수 있어요.'],
+   ['내비는 꼭 티맵을 써야 하나요?','이 포인트를 받으려면 네, 티맵이어야 해요. 티맵 앱에서 목적지를 정하고 길안내를 받아 도착해야 기록이 남거든요. 차에 달린 내비가 더 편하면 그걸로 운전하되, 휴대폰 티맵도 같은 목적지로 길안내를 켜 두세요. 티맵 앱은 무료이고, 처음 쓰면 가입(로그인)이 필요해요.'],
+   ['하이브리드 차도 되나요?','도장과 포인트는 어떤 차든 똑같이 받아요. 다만 2천포인트를 더 주는 건 전기차만이에요. 렌터카 할인은 하이브리드·전기·가스 차를 빌릴 때 받아요.'],
+   ['할인권이랑 환급은 뭐가 달라요?','할인권은 결제할 때 바로 깎이는 것이고(숙박·캠핑), 환급은 일단 내 돈으로 낸 뒤 나중에 상품권이나 포인트로 돌려받는 거예요(경비 반값, 기차표, 티맵).'],
+   ['순서를 놓치면 어떻게 돼요?','반값 환급은 떠나기 전에 신청해서 승인받지 않으면 못 받아요. 기차표는 일반 승차권으로 사면 안 되고 전용 상품으로 사야 해요. 아래 체크리스트 1번(출발 전)부터 차례대로 하시면 돼요.']
+  ];
+  return `<div class="sec"><h2>자주 묻는 것</h2></div>${q.map(([t,a])=>`<details class="qa"><summary>${t}</summary><p>${a}</p></details>`).join('')}`;
+}
+function renderPlan(){
+  if(!S.origin||!S.dest) return SCREENS.dest();
+  const P=computePlan(),{o,d,v,b,M}=P;
+  const names=list=>list.map(p=>p.label).join(', ');
+  // 경로 스트립
+  const strip=[{p:o,r:'출발'},...(v?[{p:v,r:'경유'}]:[]),...P.extras.map(p=>({p,r:'들르기'})),{p:d,r:'도착'}];
+  const route=`<div class="route">${strip.map(s=>`<div class="stop${s.r!=='출발'&&s.p.decline?' ok':''}"><div class="dotc">${s.r!=='출발'&&s.p.decline?'환급':s.r}</div><div class="nm">${s.p.label}</div><div class="rl">${s.r}</div></div>`).join('')}</div>`;
+  const trainOK=b.train&&b.train.length;
+  const ticket=`<div class="ticket">${route}<div class="total">
+    <div class="lab">이번 여정에서 돌려받을 수 있는 금액</div>
+    <div class="big">${P.total?won(P.total):'0원'}</div>
+    ${trainOK?`<span class="plus">+ 기차표값 100% (기차 할인권으로)</span>`:''}
+    ${P.parts.length?`<ul class="breakdown">${P.parts.map(x=>`<li><span>${x[0]}</span><b>${x[2]?x[2]+' ':''}${won(x[1])}</b></li>`).join('')}</ul>`:''}
+    ${!P.total&&!trainOK?'<p class="hint">아직 확정 금액형 혜택이 없어요. 아래에서 근처 지역을 들르기로 추가해 보세요.</p>':''}
+  </div></div>`;
+  // 목적지 판정
+  let status;
+  if(d.decline){
+    const has=[d.ktx&&'기차표 전액 환급',d.half&&'경비 50% 환급',d.bonus&&'온누리 2만원','티맵 스탬프',d.island&&'섬 숙박 할인'].filter(Boolean);
+    status=`<div class="status yes"><b>${d.label}, 이번 혜택 대상이에요</b><p>${has.join(' · ')}${d.note?' — 가을엔 '+d.note+'.':''}</p></div>`;
+  } else {
+    status=`<div class="status no"><b>${d.label}은(는) 인구감소지역이 아니에요</b><p>${b.nonCap?'비수도권 숙박 할인권은 쓸 수 있어요. ':''}근처나 가는 길의 대상 지역을 한 곳 들르면 기차·티맵·환급 혜택이 생겨요.</p></div>`;
+  }
+  // 근처/경유 후보
+  const near=P.cands.length?`<div class="sec"><h2>들렀다 가면 더 받는 곳</h2><p class="hint" style="margin-top:0">목적지에서 35km 안이거나, 가는 길에서 25km 안쪽인 대상 지역이에요.</p></div>
+    <div class="near">${P.cands.map(x=>{const on=S.extras.includes(x.p.id);return `<div class="nrow"><div class="tx"><b>${x.p.label}</b> <div>${x.kind} · ${Math.round(x.kind==='목적지 근처'?x.dd:x.dr)}km${x.p.note?' · '+x.p.note:''}</div><span class="tags">${tagsOf(x.p)}</span></div>
+      <button class="add" aria-pressed="${on}" data-a="extra" data-v="${x.p.id}">${on?'들르기 ✓':'들르기'}</button></div>`;}).join('')}</div>`:'';
+
+  // ===== 단계별 체크리스트 =====
+  const ph=[[],[],[],[]];
+  if(b.half.length){
+    ph[0].push(step('half-apply','반값 환급 · 필수','여행 계획 먼저 신청하고 승인받기',`<span class="must">출발 전에 승인받지 않으면 환급이 안 돼요.</span> ${names(b.half)} 지자체의 지역사랑 휴가지원 페이지에서 일정과 방문 계획을 제출하세요. 반값여행 페이지에서 지역을 고르면 그 지자체 신청 화면으로 넘어가요.`,lk('half'),true));
+  }
+  if(trainOK){
+    ph[0].push(step('ktx-buy','기차 · 필수','일반 승차권 말고 「인구감소지역행 자유여행상품」으로 예매',`${names(b.train)} 행 상품을 사야 기차표값 100%가 기차 할인권으로 돌아와요. 관광공사·코레일이 절반씩 부담하는 구조예요.`,lk('korail'),true));
+    ph[0].push(step('ktx-extra','기차','테마열차 50% · 내일로 패스 2만원 할인 같이 보기','5개 노선 테마열차와 내일로 패스 할인이 추가로 붙어요.',lk('korail',1)));
+  } else if(M('train')&&!d.decline){
+    ph[0].push(step('ktx-none','기차','목적지 대신 대상 지역행 상품을 찾아보기','기차표 전액 환급은 코레일과 협약한 41개 인구감소지역행 상품만 해당돼요. 위 「들렀다 가면」 목록에 기차 아이콘이 있는 곳을 확인해 보세요.',lk('korail',1)));
+  }
+  if(S.stay==='hotel'&&b.nonCap){
+    ph[0].push(step('stay-coupon','숙소',`숙박세일페스타 할인권 받고 예약하기`,`비수도권 숙소 할인권 약 8만장이 1인 1매 선착순으로 풀려요. 숙박앱에서 쿠폰을 먼저 받은 뒤 결제하세요. <b>11월 8일까지만 사용</b>할 수 있고, 지역별 수량이 달라요.${b.island?' 섬 숙소는 7만원 이상이면 5만원, 미만이면 3만원 할인돼요.':''}`,lk('yanolja')+lk('yeogi')+lk('interpark')+lk('stay',1)));
+  }
+  if(S.stay==='camp'){
+    ph[0].push(step('camp','캠핑','캠핑장 할인권 받기','11월 28일까지 캠핑 예약 플랫폼에서 발급받을 수 있어요.',lk('campingtalk')+lk('camfit')));
+  }
+  if(P.drive){
+    ph[0].push(step('tmap-pledge','티맵 · 필수','티맵 앱에서 「친환경 안전 여행 서약」 하기','티맵 앱의 이벤트 화면에서 서약 버튼을 한 번 눌러 두면 돼요. 이 이벤트 자세한 화면은 티맵 앱 안에서만 볼 수 있어요. 기간은 10월 1일부터 11월 30일까지예요.',lk('tmap'),true));
+  }
+  if(b.rent){
+    ph[0].push(step('rent','렌터카','렌터카 할인 대상 지역·차종 확인 후 예약',`수도권 제외 64개 연안 시군구에서 14시간 대여 시 1만원, 48시간 대여 시 2만원 할인(제주는 5천원·1만원). 하이브리드·전기·가스 차량만, <b>10월 한 달만</b> 적용돼요. 목적지가 연안 지역인지와 참여 업체를 안내 페이지에서 먼저 확인하세요.`,lk('sea')+lk('socar',1)));
+  }
+  if(b.air){
+    ph[0].push(step('air','항공',`네이버 항공권으로 김포→${b.air.to} 예약`,`이 경로로 사야 1인당 ${won(b.air.amt)} 네이버페이 포인트가 나와요. 예약 1건당 최대 4명, 11월 30일까지.`,lk('naverair')));
+  } else if(M('air')){
+    ph[0].push(step('air-no','항공','항공 혜택 노선 확인','내륙은 김포에서 광주·울산·여수·포항·사천 노선, 제주는 1인 5천원 포인트예요. 목적지 근처 공항이 이 중 하나인지 보세요.',lk('naverair',1)));
+  }
+  if(S.worker){
+    ph[0].push(step('worker','노동자 휴가지원','휴가샵에서 여행상품 50% 할인 확인','노동자 휴가지원 참여자는 최대 50%(5만원 한도) 할인받을 수 있어요.',lk('benepia')));
+  }
+  // 가는 길
+  if(P.drive&&P.dv.length){
+    ph[1].push(step('tmap-nav','티맵','들르는 대상 지역마다 티맵 목적지로 설정해 주행',`<b>차에 달린 내비나 카카오내비로 가면 인정이 안 돼요.</b> 휴대폰 티맵에 그 지역 관광명소를 목적지로 넣고 길안내를 켠 채로, 출발지에서 30km 넘게 달려 도착해야 도장이 찍혀요. 첫 번째 지역 5천, 두 번째 1만, 세 번째 1만5천 포인트로 세 곳이면 3만 포인트예요. 같은 지역은 두 번 쳐주지 않고, 내가 사는 지역은 빠져요. 이번 여정 대상: ${names(P.dv)}.`,lk('tmap',1)));
+  }
+  if(trainOK){
+    ph[1].push(step('ktx-ticket','기차','상품 승차권과 QR 인증 위치 미리 확인','도착해서 인증할 지정 여행지가 어디인지 상품 안내에서 봐 두세요.',''));
+  }
+  // 도착해서
+  if(trainOK){
+    ph[2].push(step('ktx-qr','기차 · 필수','지정 여행지에서 QR 코드로 방문 인증',`인증해야 기차표값 100%짜리 할인권이 지급돼요.`,'',true));
+  }
+  if(b.half.length){
+    ph[2].push(step('half-receipt','반값 환급 · 필수','영수증·카드 전표 모두 챙기기','<b>카드로 긁으면 인정 안 되는 지역이 많아요.</b> 상당수 지자체는 그 지역 모바일 상품권(제로페이 앱 등)으로 낸 것만 인정하고, 숙박만 카드·현금영수증을 예외로 쳐줘요. 여행 경비는 보통 최소 10만원 이상, 지정 관광지 2곳 이상 인증 사진(일행 전원 얼굴 + 관광지)도 요구해요.'+(S.stay==='friend'?' 숙박비가 없으니 식당·체험·현지 장보기로 10만원을 채워야 해요.':'')+' 정확한 조건은 신청한 지자체 안내를 따르세요.','',true));
+  }
+  if(b.bonus.length){
+    ph[2].push(step('bonus','온누리상품권',`${names(b.bonus)} 방문 온누리상품권 2만원`,'상반기 방문객이 적었던 13곳 추가 혜택이에요. 선착순 2천명 한정이라 일찍 갈수록 유리해요.',lk('month',1)));
+  }
+  if(S.stay==='friend') ph[2].push(step('gift','지인 집','신세 지는 집에 줄 장보기·선물은 현지에서','그 지역 시장이나 가게에서 사면 온누리상품권·지역사랑상품권을 쓸 수 있고, 반값 환급 대상 지역이라면 지출 증빙으로도 남아요.',''));
+  b.local.forEach((l,i)=>ph[2].push(step('local'+i,'현지 할인',l.t,l.d,'')));
+  ph[2].push(step('temple','더 아끼기','템플스테이 50% · 농촌 투어패스 40%','전국 공통 할인이에요. 일정에 맞으면 붙여 보세요.',lk('temple',1)));
+  // 다녀와서
+  if(b.half.length){
+    ph[3].push(step('half-claim','반값 환급','지출 증빙 제출 → 모바일 지역사랑상품권 받기',`1인 최대 ${S.youth?'14만원(청년)':'10만원'}. 제출 기한을 놓치지 마세요. 받은 상품권은 해당 지역에서 다시 쓸 수 있어요.`,lk('month',1)));
+  }
+  if(trainOK) ph[3].push(step('ktx-voucher','기차','기차 할인권 들어왔는지 확인','현금이 아닌 다음 기차표 할인권으로 돌아와요. 사용 기한을 확인해 두세요.',lk('korail',1)));
+  if(P.drive&&P.dv.length) ph[3].push(step('tmap-review','티맵','후기 영상 올리고 포인트 추가 받기','티맵에 영상 후기를 올리면 2천포인트, 방문 지역에서 디지털 관광주민증을 쓰면 5천포인트를 따로 더 줘요.',lk('tmap',1)));
+  if(b.air) ph[3].push(step('air-pt','항공','네이버페이 포인트 적립 확인','',lk('naverair',1)));
+  ph[3].push(step('festa','덤','10/29~11/15 코리아 그랜드 페스티벌','디지털 온누리상품권·지역사랑상품권 할인이 열려요.',''));
+
+  const all=ph.flat().length, doneN=ph.flat().filter(s=>s.includes('class="step done"')).length;
+  const titles=['출발 전','가는 길','도착해서','다녀와서'];
+  const phases=ph.map((list,i)=>list.length?`<section class="phase"><div class="phase-h"><span class="n">${i+1}</span><h2>${titles[i]}</h2></div>${list.join('')}</section>`:'').join('');
+
+  return `${header('dest')}
+    ${status}${dateCheck(P)}${compare(P)}${ticket}${howBack(P)}${near}${faq()}
+    <div class="sec"><h2>돌려받기 체크리스트</h2>
+    <div class="prog" role="progressbar" aria-valuenow="${doneN}" aria-valuemax="${all}"><i style="width:${all?doneN/all*100:0}%"></i></div>
+    <p class="hint">${doneN}/${all} 완료 · 체크는 이 기기에 저장돼요</p></div>
+    ${phases}
+    <div style="margin-top:28px;display:grid;gap:10px">
+      <button class="btn alt" data-a="go" data-v="dest">여정 수정하기</button>
+      <button class="ghost" data-a="reset">처음부터 다시</button>
+    </div>
+    <p class="foot">금액은 기사에 나온 상한선을 더한 값이고, 실제 환급은 지출액·선착순 수량·지자체 승인에 따라 달라져요. 지역사랑 휴가지원 대상은 기사에 언급된 지역만 표시했으니, 다른 지역도 ${L.month[0]} 누리집에서 확인해 보세요. 렌터카 연안 지역 여부도 안내 페이지 확인이 필요해요.</p>`;
+}
+
+/* ===== 렌더 & 이벤트 ===== */
+function render(){document.body.classList.toggle('big',!!S.bigText);app.innerHTML=(SCREENS[S.screen]||SCREENS.start)();save();}
+app.addEventListener('click',e=>{
+  const t=e.target.closest('[data-a]');if(!t)return;
+  const a=t.dataset.a,v=t.dataset.v,f=t.dataset.f;
+  if(a==='check')return;
+  if(a==='mode'){S.screen=v;}
+  else if(a==='go'){S.screen=v;window.scrollTo(0,0);}
+  else if(a==='pick'){S[f]=v;if(f!=='origin')S.extras=[];}
+  else if(a==='clear'){S[v]=null;S.extras=[];}
+  else if(a==='toggle'){const arr=S[f];const i=arr.indexOf(v);i>=0?arr.splice(i,1):arr.push(v);}
+  else if(a==='setone'){S[f]=v;}
+  else if(a==='flag'){S[v]=!S[v];if(v!=='bigText')S.noneSel=false;}
+  else if(a==='none'){S.youth=false;S.worker=false;S.noneSel=true;}
+  else if(a==='choose'){S.dest=v;S.via=null;S.extras=[];S.screen='dest';window.scrollTo(0,0);}
+  else if(a==='extra'){const i=S.extras.indexOf(v);i>=0?S.extras.splice(i,1):S.extras.push(v);}
+  else if(a==='reset'){S={...S,screen:'start',origin:null,dest:null,via:null,extras:[],checks:{}};window.scrollTo(0,0);}
+  const y=window.scrollY;render();if(a==='extra'||a==='toggle'||a==='flag'||a==='setone'||a==='pick'||a==='clear')window.scrollTo(0,y);
+});
+app.addEventListener('change',e=>{
+  const t=e.target;if(t.dataset.a!=='check')return;
+  S.checks[t.dataset.v]=t.checked;const y=window.scrollY;render();window.scrollTo(0,y);
+});
+app.addEventListener('change',e=>{
+  const t=e.target;if(!t.dataset.in)return;S[t.dataset.in]=t.value;
+  if(t.dataset.in==='depart'&&S.ret&&S.ret<t.value)S.ret=t.value;
+  const y=window.scrollY;render();window.scrollTo(0,y);
+});
+app.addEventListener('input',e=>{
+  const t=e.target;if(!t.dataset.f)return;
+  const box=app.querySelector(`[data-list="${t.dataset.f}"]`);if(box)box.innerHTML=pickList(t.dataset.f,t.value);
+});
+render();
+</script>
+</body>
+</html>
